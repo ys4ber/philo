@@ -74,6 +74,14 @@ void *routine(void *p)
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
+        philo->nb_eat++;
+        // printf("\n\nnb_eat: %d\n\n", philo->nb_eat);
+        if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
+        {
+            philo->is_full = 1;
+            ft_print(philo, "is full");
+            break;
+        }
     }
     return (NULL);
 }
@@ -138,4 +146,14 @@ int main(int ac , char **av)
     
     for (int i = 0; i < philo->data->nb_philo; i++)
         pthread_join(philo[i].philo, NULL);
+
+    for (int i = 0; i < philo->data->nb_philo; i++)
+        pthread_mutex_destroy(&philo->forks[i]);
+
+    pthread_mutex_destroy(philo->print);
+    free(philo->forks);
+    free(philo->print);
+    free(philo->data);
+    free(philo);
+    return (0);
 }
