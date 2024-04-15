@@ -12,7 +12,7 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME) : $(OBJS)
-	$(CC) $(CFLAGS)  $(SRCS) -o $(NAME) 
+	$(CC) $(CFLAGS)  $(SRCS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)

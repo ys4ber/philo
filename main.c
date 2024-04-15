@@ -59,7 +59,10 @@ void *routine(void *p)
 {
     t_philo *philo;
     philo = (t_philo *)p;
-    
+
+    if (philo->id % 2 == 0)
+        ft_usleep(50);
+
     while (1)
     {
         pthread_mutex_lock(philo->left_fork);
@@ -70,11 +73,11 @@ void *routine(void *p)
         ft_usleep(philo->data->time_to_eat);
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
-        philo->last_eat = ft_get_time();
+        philo->last_eat = ft_get_time() - philo->data->start_time;
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
-        ft_usleep(philo->data->time_to_sleep); // i add this to makea : eat -> sleep -> think -> eat -> sleep -> think
+        //ft_usleep(philo->data->time_to_sleep); // i add this to makea : eat -> sleep -> think -> eat -> sleep -> think
         philo->nb_eat++;
         // printf("\n\nnb_eat: %d\n\n", philo->nb_eat);
         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
@@ -103,11 +106,7 @@ int main(int ac , char **av)
     philo->data->time_to_eat = ft_atoi(av[3]);
     philo->data->time_to_sleep = ft_atoi(av[4]);
     philo->data->nb_must_eat = (ac == 6) ? ft_atoi(av[5]) : -1;
-    philo->data->start_time = ft_get_time();
-    // philo->is_dead = 0;
-    // philo->is_full = 0;
-    // philo->is_over = 0;
-    
+    philo->data->start_time = ft_get_time();    
 
     philo->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \
         * philo->data->nb_philo);
