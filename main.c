@@ -77,7 +77,7 @@ void *routine(void *p)
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
-        //ft_usleep(philo->data->time_to_sleep); // i add this to makea : eat -> sleep -> think -> eat -> sleep -> think
+        ft_usleep(philo->data->time_to_sleep); // i add this to makea : eat -> sleep -> think -> eat -> sleep -> think
         philo->nb_eat++;
         // printf("\n\nnb_eat: %d\n\n", philo->nb_eat);
         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
