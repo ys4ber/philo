@@ -35,7 +35,7 @@ typedef struct s_philo
 
     pthread_t philo;
     t_data *data;
-
+    pthread_mutex_t *last_eat_time;
     pthread_mutex_t *print;
     pthread_mutex_t *forks;
     pthread_mutex_t *left_fork;

@@ -67,13 +67,14 @@ void *routine(void *p)
         pthread_mutex_lock(philo->right_fork);
         ft_print(philo, "has taken a fork");
         ft_print(philo, "is eating");
-        philo->last_eat = ft_get_time();
         ft_usleep(philo->data->time_to_eat);
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
+        philo->last_eat = ft_get_time();
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
+        ft_usleep(philo->data->time_to_sleep); // i add this to makea : eat -> sleep -> think -> eat -> sleep -> think
         philo->nb_eat++;
         // printf("\n\nnb_eat: %d\n\n", philo->nb_eat);
         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
@@ -85,8 +86,6 @@ void *routine(void *p)
     }
     return (NULL);
 }
-
-
 
 int main(int ac , char **av)
 {
@@ -105,25 +104,33 @@ int main(int ac , char **av)
     philo->data->time_to_sleep = ft_atoi(av[4]);
     philo->data->nb_must_eat = (ac == 6) ? ft_atoi(av[5]) : -1;
     philo->data->start_time = ft_get_time();
-    philo->is_dead = 0;
-    philo->is_full = 0;
-    philo->is_over = 0;
+    // philo->is_dead = 0;
+    // philo->is_full = 0;
+    // philo->is_over = 0;
     
 
     philo->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \
         * philo->data->nb_philo);
     if (!philo->forks)
         return (ft_error("Malloc failed"));
-
     for (int i = 0; i < philo->data->nb_philo; i++)
         pthread_mutex_init(&philo->forks[i], NULL);
+
+
+
+    philo->last_eat_time = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->last_eat_time)
+        return (ft_error("Malloc failed"));
+    pthread_mutex_init(philo->last_eat_time, NULL);
     
+
+
     philo->print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
     if (!philo->print)
         return (ft_error("Malloc failed"));
-
-
     pthread_mutex_init(philo->print, NULL);
+
+
 
     for (int i = 0; i < philo->data->nb_philo; i++)
     {
@@ -139,10 +146,12 @@ int main(int ac , char **av)
         philo[i].forks = philo->forks;
         philo[i].left_fork = &philo->forks[i];
         philo[i].right_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
+        pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
+        // ft_usleep(50);
     }
 
-    for (int i = 0; i < philo->data->nb_philo; i++)
-        pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
+    // for (int i = 0; i < philo->data->nb_philo; i++)
+    //     pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
     
     for (int i = 0; i < philo->data->nb_philo; i++)
         pthread_join(philo[i].philo, NULL);
