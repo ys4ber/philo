@@ -27,7 +27,7 @@ typedef struct s_philo
 {
     int id;
     
-    // int is_dead;
+    int is_dead;
     int is_full;
     int is_over;
     int is_started;
