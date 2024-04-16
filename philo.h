@@ -19,6 +19,7 @@ typedef struct s_data
     int time_to_sleep;
     int nb_must_eat;
     long start_time;
+    int is_dead;
     
 } t_data;
 
@@ -26,7 +27,7 @@ typedef struct s_philo
 {
     int id;
     
-    int is_dead;
+    // int is_dead;
     int is_full;
     int is_over;
     int is_started;
@@ -45,32 +46,52 @@ typedef struct s_philo
 
 
 
+// #pragma once
 
-// typedef struct s_data
+
+// #include <pthread.h>
+// #include <semaphore.h>
+// #include <stdlib.h>
+// #include <stdio.h>
+// #include <unistd.h>
+// #include <time.h>
+// #include <sys/time.h>
+
+
+
+// typedef struct s_philo_info
 // {
-//     int nb_philo;
-//     int time_to_die;
-//     int time_to_eat;
-//     int time_to_sleep;
-//     int nb_must_eat;
-//     int is_dead;
-//     int is_full;
-//     int is_over;
-//     int is_started;
-//     long start_time;
+// 	long	start_time;
+// 	int		number_of_philo;
+// 	int		time_to_die;
+// 	int		time_to_eat;
+// 	int		time_to_sleep;
+// 	int		number_of_meals;
+// }	t_philo_info;
 
-//     int nb_eat;
-
-//     struct timeval start;
-//     pthread_mutex_t print;
-//     pthread_t thread;
-//     pthread_mutex_t *forks;
-//     pthread_mutex_t *left_fork;
-//     pthread_mutex_t *right_fork;
-// } t_data;
+// // typedef struct s_data
+// // {
+// // 	pthread_mutex_t	*forks;
+// // 	pthread_mutex_t	print;
+// // 	pthread_mutex_t	*meals;
+// // 	pthread_mutex_t	last_meal_check;
+// // }	t_data;
 
 // typedef struct s_philo
 // {
-//     int id;
-//     t_data *data;
-// } t_philo;
+// 	int				philo_id;
+// 	long			last_meal;
+// 	int				maels;
+
+// 	pthread_t		thread;
+
+//     pthread_mutex_t	*forks;
+// 	pthread_mutex_t	print;
+// 	pthread_mutex_t	*meals;
+// 	pthread_mutex_t	last_meal_check;
+// 	pthread_mutex_t	*left_fork;
+// 	pthread_mutex_t	*right_fork;
+
+// 	t_philo_info	info;
+	
+// }	t_philo;

@@ -54,27 +54,6 @@ void ft_print(t_philo *philo, char *str)
     pthread_mutex_unlock(philo->print);
 }
 
-int ft_check_death(t_philo *philo)
-{
-    int i;
-
-    i = 0;
-    while (i < philo->data->nb_philo)
-    {
-        pthread_mutex_lock(philo->last_eat_time);
-        if (ft_get_time() - philo[i].last_eat >= philo->data->time_to_die)
-        {
-            pthread_mutex_lock(philo->print);
-            printf("%ld %d %s\n", ft_get_time() - philo->data->start_time, philo[i].id, "is died");
-            return (1);
-        }
-        pthread_mutex_unlock(philo->last_eat_time);
-        i++;
-    }
-    
-    return (0);
-}
-
 void *routine(void *p)
 {
     t_philo *philo;
@@ -82,7 +61,7 @@ void *routine(void *p)
 
     if (philo->id % 2 == 0)
         ft_usleep(50);
-    while (philo->is_dead == 0 && philo->is_full == 0)
+    while (philo->data->is_dead == 0 && philo->is_full == 0)
     {
         pthread_mutex_lock(philo->left_fork);
         ft_print(philo, "has taken a fork");
@@ -97,12 +76,7 @@ void *routine(void *p)
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
         philo->nb_eat++;
-        if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
-        { 
-            philo->is_full = 1;
-            ft_print(philo, "is full");
-            break;
-        }
+        
     }
     return (NULL);
 }
@@ -149,7 +123,7 @@ int main(int ac , char **av)
     for (int i = 0; i < philo->data->nb_philo; i++)
     {
         philo[i].id = i + 1;
-        philo[i].is_dead = 0;
+        
         philo[i].is_full = 0;
         philo[i].is_over = 0;
         philo[i].is_started = 0;
@@ -163,11 +137,15 @@ int main(int ac , char **av)
         pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
     }
 
-    for (int i = 0; i < philo->data->nb_philo; i++)
-        pthread_join(philo[i].philo, NULL);
+    //monitoring(philo);
 
     for (int i = 0; i < philo->data->nb_philo; i++)
+    {
+        pthread_join(philo[i].philo, NULL);
         pthread_mutex_destroy(&philo->forks[i]);
+    }
+
+    
 
 
     pthread_mutex_destroy(philo->print);
