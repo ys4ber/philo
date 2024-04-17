@@ -31,7 +31,7 @@ typedef struct s_philo
     int is_full;
     int is_over;
     int is_started;
-    int last_eat;
+    long last_eat;
     int nb_eat;
 
     pthread_t philo;

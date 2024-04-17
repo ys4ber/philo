@@ -54,28 +54,6 @@ void ft_print(t_philo *philo, char *str)
     pthread_mutex_unlock(philo->print);
 }
 
-// void	ft_check_die(t_param *par)
-// {
-// 	while (par->is_all_safe)
-    
-// 	{
-// 		pthread_mutex_lock(&(par->eat));
-        
-// 		if (check_eat_time(par)) 
-// 			break ; 
-// 		if (par->must_eat_num != -1) 
-// 			if (check_eat_num(par)) 
-// 				break ; 
-// 		pthread_mutex_unlock(&(par->eat));
-        
-// 		usleep(100);
-// 	}
-// 	pthread_mutex_unlock(&(par->eat));
-    
-// 	finish_thread(par);
-    
-// }
-
 
 int ft_check_eat_time(t_philo *philo)
 {
@@ -112,7 +90,7 @@ void *routine(void *p)
         ft_usleep(philo->data->time_to_eat);
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
-        philo->last_eat = ft_get_time() - philo->data->start_time;
+        philo->last_eat = ft_get_time() ;
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
