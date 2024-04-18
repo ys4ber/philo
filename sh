@@ -10,6 +10,8 @@ count=$(< "$commit_count_file")
 
 make fclean
 
+rm -rf philo.dSYM/
+
 count=$((count + 1))
 
 echo "$count" > "$commit_count_file"
