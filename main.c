@@ -85,16 +85,25 @@ void *routine(void *p)
         
         ft_usleep(philo->data->time_to_eat);
 
-        philo->last_eat = ft_get_time();
-        philo->nb_eat++;
-        
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
+
+
         
+        philo->last_eat = ft_get_time();
+        
+       
+        
+        
+        
+        philo->nb_eat++;
+        
+
+
+
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
-        
         
         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
             philo->is_full = 1;
@@ -184,6 +193,27 @@ int main(int ac , char **av)
     pthread_mutex_init(philo->data->print, NULL);
 
     ft_start_simulation(philo);
+
+    philo->data->mutex1 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->mutex1)
+        return (ft_error("Malloc failed"));
+    pthread_mutex_init(philo->data->mutex1, NULL);
+
+    philo->data->mutex2 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->mutex2)
+        return (ft_error("Malloc failed"));
+    pthread_mutex_init(philo->data->mutex2, NULL);
+
+    philo->data->mutex3 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->mutex3)
+        return (ft_error("Malloc failed"));
+    pthread_mutex_init(philo->data->mutex3, NULL);
+
+    philo->data->mutex4 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->mutex4)
+        return (ft_error("Malloc failed"));
+    pthread_mutex_init(philo->data->mutex4, NULL);
+
 
     if (ft_monitor(philo))
         return (1);

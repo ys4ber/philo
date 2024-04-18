@@ -23,6 +23,13 @@ typedef struct s_data
     pthread_mutex_t *last_meal;
     pthread_mutex_t *last_eat_time;
     pthread_mutex_t *print;
+
+
+    pthread_mutex_t *mutex1;
+    pthread_mutex_t *mutex2;
+    pthread_mutex_t *mutex3;
+    pthread_mutex_t *mutex4;
+    
     
 } t_data;
 
@@ -40,7 +47,7 @@ typedef struct s_philo
     pthread_t philo;
     t_data *data;
 
-    
+
     // pthread_mutex_t *last_meal;
     // pthread_mutex_t *last_eat_time;
     // pthread_mutex_t *print;
