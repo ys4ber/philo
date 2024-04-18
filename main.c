@@ -84,21 +84,20 @@ void *routine(void *p)
         ft_print(philo, "is eating");
         
         ft_usleep(philo->data->time_to_eat);
+
+        philo->last_eat = ft_get_time();
+        philo->nb_eat++;
         
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
 
-        philo->last_eat = ft_get_time();
-
-        
-
-        // printf("\n\nlast_eat: %d\n\n\n", philo->last_eat);
+        // philo->last_eat = ft_get_time();
+        // philo->nb_eat++;
         
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
         
-        philo->nb_eat++;
         
         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
             philo->is_full = 1;
@@ -182,11 +181,6 @@ int main(int ac , char **av)
         return (ft_error("Malloc failed"));
     for (int i = 0; i < philo->data->nb_philo; i++)
         pthread_mutex_init(&philo->forks[i], NULL);
-
-    philo->last_eat_time = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->last_eat_time)
-        return (ft_error("Malloc failed"));
-    pthread_mutex_init(philo->last_eat_time, NULL);
     
     philo->print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
     if (!philo->print)
