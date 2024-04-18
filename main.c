@@ -89,8 +89,9 @@ void *routine(void *p)
         pthread_mutex_unlock(philo->right_fork);
 
 
-        
+        pthread_mutex_lock(philo->data->mutex1);
         philo->last_eat = ft_get_time();
+        pthread_mutex_unlock(philo->data->mutex1);
         
        
         
@@ -151,13 +152,17 @@ int ft_monitor(t_philo *philo)
     {
         for (int i = 0; i < philo->data->nb_philo; i++)
         {
+            
             if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
                 philo[i].is_full = 1;
+            pthread_mutex_lock(philo->data->mutex1);   
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
             {
                 ft_print(&philo[i], "died");
+                pthread_mutex_unlock(philo->data->mutex1);  
                 return (1);
             }
+            pthread_mutex_unlock(philo->data->mutex1); 
         }
     }
     return (0);
@@ -192,7 +197,6 @@ int main(int ac , char **av)
         return (ft_error("Malloc failed"));
     pthread_mutex_init(philo->data->print, NULL);
 
-    ft_start_simulation(philo);
 
     philo->data->mutex1 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
     if (!philo->data->mutex1)
@@ -214,6 +218,7 @@ int main(int ac , char **av)
         return (ft_error("Malloc failed"));
     pthread_mutex_init(philo->data->mutex4, NULL);
 
+    ft_start_simulation(philo);
 
     if (ft_monitor(philo))
         return (1);
