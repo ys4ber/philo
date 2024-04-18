@@ -106,9 +106,11 @@ void *routine(void *p)
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
         
+
+        pthread_mutex_lock(philo->data->mutex2);
         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
             philo->is_full = 1;
-           
+        pthread_mutex_unlock(philo->data->mutex2);
     }
     return (NULL);
 }
@@ -152,9 +154,10 @@ int ft_monitor(t_philo *philo)
     {
         for (int i = 0; i < philo->data->nb_philo; i++)
         {
-            
+            pthread_mutex_lock(philo->data->mutex2);
             if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
                 philo[i].is_full = 1;
+            pthread_mutex_unlock(philo->data->mutex2);
             pthread_mutex_lock(philo->data->mutex1);   
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
             {
