@@ -20,6 +20,9 @@ typedef struct s_data
     int nb_must_eat;
     long start_time;
     int is_dead;
+    pthread_mutex_t *last_meal;
+    pthread_mutex_t *last_eat_time;
+    pthread_mutex_t *print;
     
 } t_data;
 
@@ -36,9 +39,12 @@ typedef struct s_philo
 
     pthread_t philo;
     t_data *data;
-    pthread_mutex_t *last_meal;
-    pthread_mutex_t *last_eat_time;
-    pthread_mutex_t *print;
+
+    
+    // pthread_mutex_t *last_meal;
+    // pthread_mutex_t *last_eat_time;
+    // pthread_mutex_t *print;
+
     pthread_mutex_t *forks;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;

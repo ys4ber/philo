@@ -58,9 +58,9 @@ int ft_error(char *str)
 
 void ft_print(t_philo *philo, char *str)
 {
-    pthread_mutex_lock(philo->print);
+    pthread_mutex_lock(philo->data->print);
     printf("%ld %d %s\n", ft_get_time() - philo->data->start_time, philo->id, str);
-    pthread_mutex_unlock(philo->print);
+    pthread_mutex_unlock(philo->data->print);
 }
 
 void *routine(void *p)
@@ -90,9 +90,6 @@ void *routine(void *p)
         
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
-
-        // philo->last_eat = ft_get_time();
-        // philo->nb_eat++;
         
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
@@ -118,7 +115,6 @@ void ft_start_simulation(t_philo *philo)
         philo[i].last_eat = ft_get_time();
         philo[i].nb_eat = 0;
         philo[i].data = philo->data;
-        philo[i].print = philo->print;
         philo[i].forks = philo->forks;
         philo[i].left_fork = &philo->forks[i];
         philo[i].right_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
@@ -133,9 +129,9 @@ void ft_free_all(t_philo *philo)
         pthread_join(philo[i].philo, NULL);
         pthread_mutex_destroy(&philo->forks[i]);
     }
-    pthread_mutex_destroy(philo->print);
+    pthread_mutex_destroy(philo->data->print);
     free(philo->forks);
-    free(philo->print);
+    free(philo->data->print);
     free(philo->data);
     free(philo);
 }
@@ -182,10 +178,10 @@ int main(int ac , char **av)
     for (int i = 0; i < philo->data->nb_philo; i++)
         pthread_mutex_init(&philo->forks[i], NULL);
     
-    philo->print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->print)
+    philo->data->print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->print)
         return (ft_error("Malloc failed"));
-    pthread_mutex_init(philo->print, NULL);
+    pthread_mutex_init(philo->data->print, NULL);
 
     ft_start_simulation(philo);
 
