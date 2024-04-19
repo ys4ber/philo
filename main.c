@@ -112,6 +112,9 @@ void *routine(void *p)
         philo->nb_eat++;
         pthread_mutex_unlock(philo->data->mutex2);
         
+
+
+
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
@@ -140,7 +143,7 @@ void ft_free_all(t_philo *philo)
 
 
 
-int ft_monitor(t_philo *philo)
+int ft_old_monitor(t_philo *philo)
 {
     while (1)
     {
@@ -153,7 +156,7 @@ int ft_monitor(t_philo *philo)
             
             pthread_mutex_unlock(philo->data->mutex2);
             pthread_mutex_lock(philo->data->mutex1);   
-            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die && philo[i].is_full == 0)
+            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
             {
                 ft_print(&philo[i], "died");
                 pthread_mutex_unlock(philo->data->mutex1);  
@@ -182,6 +185,29 @@ void ft_start_simulation(t_philo *philo)
         philo[i].right_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
         pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
     }
+}
+
+void ft_monitoring(t_philo *philo)
+{
+    while (1)
+    {
+        for (int i = 0; i < philo->data->nb_philo; i++)
+        {
+            pthread_mutex_lock(philo->data->mutex2);
+            if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
+                philo[i].is_full = 1;
+            pthread_mutex_unlock(philo->data->mutex2);
+            pthread_mutex_lock(philo->data->mutex1);
+            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
+            {
+                ft_print(&philo[i], "died");
+                pthread_mutex_unlock(philo->data->mutex1);
+                return ;
+            }
+            pthread_mutex_unlock(philo->data->mutex1);
+        }
+    }
+
 }
 
 
@@ -226,8 +252,10 @@ int main(int ac , char **av)
 
     ft_start_simulation(philo);
 
-    if (ft_monitor(philo))
-        return (1);
+    ft_monitoring(philo);
+
+    // if (ft_old_monitor(philo))
+    //     return (1);
 
     ft_free_all(philo);
 
