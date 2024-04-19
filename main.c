@@ -71,8 +71,20 @@ void *routine(void *p)
     if (philo->id % 2 == 0)
         ft_usleep(50);
 
-    while (!philo->is_full && !philo->is_over)
+    while (1)
     {
+        pthread_mutex_lock(philo->data->mutex2);
+        if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
+            philo->is_full = 1;
+        pthread_mutex_unlock(philo->data->mutex2);
+        
+        pthread_mutex_lock(philo->data->mutex2);
+        if (philo->is_full)
+        {
+            pthread_mutex_unlock(philo->data->mutex2);
+            return (NULL);
+        }
+        pthread_mutex_unlock(philo->data->mutex2);
         pthread_mutex_lock(philo->left_fork);
 
         ft_print(philo, "has taken a fork");
@@ -96,24 +108,61 @@ void *routine(void *p)
        
         
         
-        pthread_mutex_lock(philo->data->mutex3);
+        pthread_mutex_lock(philo->data->mutex2);
         philo->nb_eat++;
-        pthread_mutex_unlock(philo->data->mutex3);
+        pthread_mutex_unlock(philo->data->mutex2);
         
-
-
-
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
         
 
-        pthread_mutex_lock(philo->data->mutex2);
-        if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
-            philo->is_full = 1;
-        pthread_mutex_unlock(philo->data->mutex2);
+        
     }
     return (NULL);
+}
+
+
+
+void ft_free_all(t_philo *philo)
+{
+    for (int i = 0; i < philo->data->nb_philo; i++)
+    {
+        pthread_join(philo[i].philo, NULL);
+        pthread_mutex_destroy(&philo->forks[i]);
+    }
+    pthread_mutex_destroy(philo->data->print);
+    free(philo->forks);
+    free(philo->data->print);
+    free(philo->data);
+    free(philo);
+}
+
+
+
+int ft_monitor(t_philo *philo)
+{
+    while (1)
+    {
+        for (int i = 0; i < philo->data->nb_philo; i++)
+        {
+            pthread_mutex_lock(philo->data->mutex2);
+            
+            if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
+                philo[i].is_full = 1;
+            
+            pthread_mutex_unlock(philo->data->mutex2);
+            pthread_mutex_lock(philo->data->mutex1);   
+            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die && philo[i].is_full == 0)
+            {
+                ft_print(&philo[i], "died");
+                pthread_mutex_unlock(philo->data->mutex1);  
+                return (1);
+            }
+            pthread_mutex_unlock(philo->data->mutex1); 
+        }
+    }
+    return (0);
 }
 
 void ft_start_simulation(t_philo *philo)
@@ -133,45 +182,6 @@ void ft_start_simulation(t_philo *philo)
         philo[i].right_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
         pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
     }
-}
-
-void ft_free_all(t_philo *philo)
-{
-    for (int i = 0; i < philo->data->nb_philo; i++)
-    {
-        pthread_join(philo[i].philo, NULL);
-        pthread_mutex_destroy(&philo->forks[i]);
-    }
-    pthread_mutex_destroy(philo->data->print);
-    free(philo->forks);
-    free(philo->data->print);
-    free(philo->data);
-    free(philo);
-}
-
-int ft_monitor(t_philo *philo)
-{
-    while (1)
-    {
-        for (int i = 0; i < philo->data->nb_philo; i++)
-        {
-            pthread_mutex_lock(philo->data->mutex2);
-            pthread_mutex_lock(philo->data->mutex3);
-            if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
-                philo[i].is_full = 1;
-            pthread_mutex_unlock(philo->data->mutex3);
-            pthread_mutex_unlock(philo->data->mutex2);
-            pthread_mutex_lock(philo->data->mutex1);   
-            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
-            {
-                ft_print(&philo[i], "died");
-                pthread_mutex_unlock(philo->data->mutex1);  
-                return (1);
-            }
-            pthread_mutex_unlock(philo->data->mutex1); 
-        }
-    }
-    return (0);
 }
 
 
@@ -213,16 +223,6 @@ int main(int ac , char **av)
     if (!philo->data->mutex2)
         return (ft_error("Malloc failed"));
     pthread_mutex_init(philo->data->mutex2, NULL);
-
-    philo->data->mutex3 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->data->mutex3)
-        return (ft_error("Malloc failed"));
-    pthread_mutex_init(philo->data->mutex3, NULL);
-
-    philo->data->mutex4 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->data->mutex4)
-        return (ft_error("Malloc failed"));
-    pthread_mutex_init(philo->data->mutex4, NULL);
 
     ft_start_simulation(philo);
 
