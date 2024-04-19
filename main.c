@@ -24,13 +24,6 @@ int ft_atoi(const char *str)
     return (res * sign);
 }
 
-// long	ft_get_time(void)
-// {
-// 	struct timeval	time;
-
-// 	gettimeofday(&time, NULL);
-// 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-// }
 
 long	ft_get_time(void)
 {
@@ -195,10 +188,15 @@ void ft_monitoring(t_philo *philo)
         {
             pthread_mutex_lock(philo->data->mutex2);
             if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
+            {
                 philo[i].is_full = 1;
+                pthread_mutex_unlock(philo->data->mutex2);
+                return ;    
+            }
+            
             pthread_mutex_unlock(philo->data->mutex2);
             pthread_mutex_lock(philo->data->mutex1);
-            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
+            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die )
             {
                 ft_print(&philo[i], "died");
                 pthread_mutex_unlock(philo->data->mutex1);
@@ -208,6 +206,12 @@ void ft_monitoring(t_philo *philo)
         }
     }
 
+}
+
+int ft_free(t_philo *philo)
+{
+    ft_free_all(philo);
+    return (1);
 }
 
 
@@ -257,7 +261,12 @@ int main(int ac , char **av)
     // if (ft_old_monitor(philo))
     //     return (1);
 
-    ft_free_all(philo);
+    pthread_mutex_lock(philo->data->mutex2);
+    if (philo->is_dead == 1 || philo->is_full == 1) 
+    {
+        pthread_mutex_unlock(philo->data->mutex2);
+        return (ft_free(philo));
+    }
 
     return (0);
     
