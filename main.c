@@ -24,7 +24,6 @@ int ft_atoi(const char *str)
     return (res * sign);
 }
 
-
 long	ft_get_time(void)
 {
 	struct timeval	time;
@@ -32,7 +31,6 @@ long	ft_get_time(void)
 	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
-
 
 void	ft_usleep(long time)
 {
@@ -92,22 +90,15 @@ void *routine(void *p)
 
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
-
-
+        
         pthread_mutex_lock(philo->data->mutex1);
         philo->last_eat = ft_get_time();
         pthread_mutex_unlock(philo->data->mutex1);
-        
-       
-        
         
         pthread_mutex_lock(philo->data->mutex2);
         philo->nb_eat++;
         pthread_mutex_unlock(philo->data->mutex2);
         
-
-
-
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
