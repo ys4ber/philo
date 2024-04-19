@@ -194,10 +194,30 @@ int ft_free(t_philo *philo)
     return (1);
 }
 
+bool ft_check_validity(int ac, char **av)
+{
+    int i;
+    int j;
 
+    i = 1;
+    while (i < ac)
+    {
+        j = 0;
+        while (av[i][j])
+        {
+            if (av[i][j] < '0' || av[i][j] > '9')
+                return (true);
+            j++;
+        }
+        i++;
+    }
+    return (false);
+}
 
 int ft_fill_data(t_philo *philo, int ac, char **av)
 {
+    if (ft_check_validity(ac, av) == true)
+        return (1);
     philo->data->nb_philo = ft_atoi(av[1]);
     philo->data->time_to_die = ft_atoi(av[2]);
     philo->data->time_to_eat = ft_atoi(av[3]);
@@ -211,6 +231,34 @@ int ft_fill_data(t_philo *philo, int ac, char **av)
 }
 
 
+int ft_init_mutexes(t_philo *philo)
+{
+    int i;
+
+    philo->data->print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->print)
+        return (1);
+    pthread_mutex_init(philo->data->print, NULL);
+    philo->data->mutex1 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->mutex1)
+        return (1);
+    pthread_mutex_init(philo->data->mutex1, NULL);
+    philo->data->mutex2 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!philo->data->mutex2)
+        return (1);
+    pthread_mutex_init(philo->data->mutex2, NULL);
+    philo->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * philo->data->nb_philo);
+    if (!philo->forks)
+        return (1);
+    i = 0;
+    while(i < philo->data->nb_philo)
+    {
+        pthread_mutex_init(&philo->forks[i], NULL);
+        i++;
+    }
+    return (0);
+}
+
 int main(int ac , char **av)
 {
     if (ac != 5 && ac != 6)
@@ -222,32 +270,11 @@ int main(int ac , char **av)
     philo->data = malloc(sizeof(t_data));
     if (!philo->data)
         return (ft_error("Malloc failed"));
-
     if (ft_fill_data(philo, ac, av) == 1)
-        return (ft_error("Malloc failed"));
-
-    philo->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * philo->data->nb_philo);
-    if (!philo->forks)
-        return (ft_error("Malloc failed"));
-    for (int i = 0; i < philo->data->nb_philo; i++)
-        pthread_mutex_init(&philo->forks[i], NULL);
+        return (ft_error("Invalid arguments or malloc failed"));
     
-    philo->data->print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->data->print)
-        return (ft_error("Malloc failed"));
-    pthread_mutex_init(philo->data->print, NULL);
-
-
-    philo->data->mutex1 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->data->mutex1)
-        return (ft_error("Malloc failed"));
-    pthread_mutex_init(philo->data->mutex1, NULL);
-
-    philo->data->mutex2 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->data->mutex2)
-        return (ft_error("Malloc failed"));
-    pthread_mutex_init(philo->data->mutex2, NULL);
-
+    if (ft_init_mutexes(philo) == 1)
+        return (ft_error("Mutex init failed"));
     ft_start_simulation(philo);
     ft_monitoring(philo);
     pthread_mutex_lock(philo->data->mutex2);
@@ -256,6 +283,5 @@ int main(int ac , char **av)
         pthread_mutex_unlock(philo->data->mutex2);
         return (ft_free(philo));
     }
-    return (0);
-    
+    return (0);   
 }
