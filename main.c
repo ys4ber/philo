@@ -1,52 +1,5 @@
 #include "philo.h"
 
-int ft_atoi(const char *str)
-{
-    int i;
-    int sign;
-    int res;
-
-    i = 0;
-    sign = 1;
-    res = 0;
-    while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
-        || str[i] == '\v' || str[i] == '\f' || str[i] == '\r')
-        i++;
-    if (str[i] == '-')
-        sign = -1;
-    if (str[i] == '-' || str[i] == '+')
-        i++;
-    while (str[i] >= '0' && str[i] <= '9')
-    {
-        res = res * 10 + str[i] - '0';
-        i++;
-    }
-    return (res * sign);
-}
-
-long	ft_get_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-void	ft_usleep(long time)
-{
-	long	start;
-
-	start = ft_get_time();
-	while (ft_get_time() - start < time)
-		usleep(50);
-}
- 
-int ft_error(char *str)
-{
-    printf("Error: %s\n", str);
-    return (1);
-}
-
 void ft_print(t_philo *philo, char *str)
 {
     pthread_mutex_lock(philo->data->print);
@@ -63,17 +16,17 @@ void *routine(void *p)
         ft_usleep(50);
     while (1)
     {
-        pthread_mutex_lock(philo->data->mutex2);
+        pthread_mutex_lock(philo->data->mutex1);
         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
             philo->is_full = 1;
-        pthread_mutex_unlock(philo->data->mutex2);
-        pthread_mutex_lock(philo->data->mutex2);
+        pthread_mutex_unlock(philo->data->mutex1);
+        pthread_mutex_lock(philo->data->mutex1);
         if (philo->is_full)
         {
-            pthread_mutex_unlock(philo->data->mutex2);
+            pthread_mutex_unlock(philo->data->mutex1);
             return (NULL);
         }
-        pthread_mutex_unlock(philo->data->mutex2);
+        pthread_mutex_unlock(philo->data->mutex1);
         pthread_mutex_lock(philo->left_fork);
         ft_print(philo, "has taken a fork");
         pthread_mutex_lock(philo->right_fork);
@@ -85,17 +38,15 @@ void *routine(void *p)
         pthread_mutex_lock(philo->data->mutex1);
         philo->last_eat = ft_get_time();
         pthread_mutex_unlock(philo->data->mutex1);
-        pthread_mutex_lock(philo->data->mutex2);
+        pthread_mutex_lock(philo->data->mutex1);
         philo->nb_eat++;
-        pthread_mutex_unlock(philo->data->mutex2);
+        pthread_mutex_unlock(philo->data->mutex1);
         ft_print(philo, "is sleeping");
         ft_usleep(philo->data->time_to_sleep);
         ft_print(philo, "is thinking");
     }
     return (NULL);
 }
-
-
 
 void ft_free_all(t_philo *philo)
 {
@@ -110,31 +61,6 @@ void ft_free_all(t_philo *philo)
     free(philo->data);
     free(philo);
 }
-
-
-
-// int ft_old_monitor(t_philo *philo)
-// {
-//     while (1)
-//     {
-//         for (int i = 0; i < philo->data->nb_philo; i++)
-//         {
-//             pthread_mutex_lock(philo->data->mutex2);
-//             if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
-//                 philo[i].is_full = 1;
-//             pthread_mutex_unlock(philo->data->mutex2);
-//             pthread_mutex_lock(philo->data->mutex1);   
-//             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
-//             {
-//                 ft_print(&philo[i], "died");
-//                 pthread_mutex_unlock(philo->data->mutex1);  
-//                 return (1);
-//             }
-//             pthread_mutex_unlock(philo->data->mutex1); 
-//         }
-//     }
-//     return (0);
-// }
 
 void ft_start_simulation(t_philo *philo)
 {
@@ -165,19 +91,20 @@ void ft_monitoring(t_philo *philo)
     {
         for (int i = 0; i < philo->data->nb_philo; i++)
         {
-            pthread_mutex_lock(philo->data->mutex2);
+            pthread_mutex_lock(philo->data->mutex1);
             if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
             {
                 philo[i].is_full = 1;
-                pthread_mutex_unlock(philo->data->mutex2);
+                pthread_mutex_unlock(philo->data->mutex1);
                 return ;    
             }
-            pthread_mutex_unlock(philo->data->mutex2);
-            pthread_mutex_lock(philo->data->mutex1);
+            // pthread_mutex_unlock(philo->data->mutex1);
+
+            // pthread_mutex_lock(philo->data->mutex1);
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die )
             {
                 printf("\033[0;31m");
-                ft_print(&philo[i], "died");
+                ft_print(&philo[i], "\n\n\n\ndiedn");
                 printf("\033[0m");
                 pthread_mutex_unlock(philo->data->mutex1);
                 return ;
@@ -194,43 +121,6 @@ int ft_free(t_philo *philo)
     return (1);
 }
 
-bool ft_check_validity(int ac, char **av)
-{
-    int i;
-    int j;
-
-    i = 1;
-    while (i < ac)
-    {
-        j = 0;
-        while (av[i][j])
-        {
-            if (av[i][j] < '0' || av[i][j] > '9')
-                return (true);
-            j++;
-        }
-        i++;
-    }
-    return (false);
-}
-
-int ft_fill_data(t_philo *philo, int ac, char **av)
-{
-    if (ft_check_validity(ac, av) == true)
-        return (1);
-    philo->data->nb_philo = ft_atoi(av[1]);
-    philo->data->time_to_die = ft_atoi(av[2]);
-    philo->data->time_to_eat = ft_atoi(av[3]);
-    philo->data->time_to_sleep = ft_atoi(av[4]);
-    if (ac == 6)
-        philo->data->nb_must_eat = ft_atoi(av[5]);
-    else
-        philo->data->nb_must_eat = -1;
-    philo->data->is_dead = 0;
-    return (0);
-}
-
-
 int ft_init_mutexes(t_philo *philo)
 {
     int i;
@@ -243,13 +133,16 @@ int ft_init_mutexes(t_philo *philo)
     if (!philo->data->mutex1)
         return (1);
     pthread_mutex_init(philo->data->mutex1, NULL);
-    philo->data->mutex2 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    if (!philo->data->mutex2)
-        return (1);
-    pthread_mutex_init(philo->data->mutex2, NULL);
+
+    // philo->data->mutex2 = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    // if (!philo->data->mutex2)
+    //     return (1);
+    // pthread_mutex_init(philo->data->mutex2, NULL);
+
     philo->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * philo->data->nb_philo);
     if (!philo->forks)
         return (1);
+    
     i = 0;
     while(i < philo->data->nb_philo)
     {
@@ -277,11 +170,12 @@ int main(int ac , char **av)
         return (ft_error("Mutex init failed"));
     ft_start_simulation(philo);
     ft_monitoring(philo);
-    pthread_mutex_lock(philo->data->mutex2);
+    pthread_mutex_lock(philo->data->mutex1);
     if (philo->is_dead == 1 || philo->is_full == 1) 
     {
-        pthread_mutex_unlock(philo->data->mutex2);
+        pthread_mutex_unlock(philo->data->mutex1);
         return (ft_free(philo));
     }
+    pthread_mutex_unlock(philo->data->mutex1);
     return (0);   
 }

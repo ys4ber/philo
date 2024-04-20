@@ -47,14 +47,18 @@ typedef struct s_philo
 
     pthread_t philo;
     t_data *data;
-
-
-    // pthread_mutex_t *last_meal;
-    // pthread_mutex_t *last_eat_time;
-    // pthread_mutex_t *print;
-
+    
     pthread_mutex_t *forks;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
 } t_philo;
 
+
+
+
+int ft_atoi(const char *str);
+long	ft_get_time(void);
+void	ft_usleep(long time);
+int ft_error(char *str);
+bool ft_check_validity(int ac, char **av);
+int ft_fill_data(t_philo *philo, int ac, char **av);
