@@ -104,12 +104,12 @@ void ft_monitoring(t_philo *philo)
         for (int i = 0; i < philo->data->nb_philo; i++)
         {
             pthread_mutex_lock(philo->data->mutex1);
-            if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
-            {
-                philo[i].is_full = 1;
-                pthread_mutex_unlock(philo->data->mutex1);
-                return ;    
-            }
+            // if (philo[i].data->nb_must_eat != -1 && philo[i].nb_eat >= philo[i].data->nb_must_eat)
+            // {
+            //     philo[i].is_full = 1;
+            //     pthread_mutex_unlock(philo->data->mutex1);
+            //     return ;    
+            // }
 
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die )
             {
@@ -122,7 +122,7 @@ void ft_monitoring(t_philo *philo)
             pthread_mutex_unlock(philo->data->mutex1);
 
         }
-        usleep(500);
+        usleep(1000);
     }
 }
 
