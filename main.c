@@ -39,11 +39,15 @@ void *routine(void *p)
             philo->is_full = 1;
         pthread_mutex_unlock(philo->data->mutex1);
         pthread_mutex_lock(philo->data->mutex1);
-        if (philo->is_full)
+        if (philo->is_full == 1 || philo->is_over == 1)
         {
             pthread_mutex_unlock(philo->data->mutex1);
             break;
         }
+        // {
+        //     pthread_mutex_unlock(philo->data->mutex1);
+        //     break;
+        // }
         pthread_mutex_unlock(philo->data->mutex1);
         ft_eat(philo);
         ft_print(philo, "is sleeping");
@@ -101,7 +105,7 @@ void ft_monitoring(t_philo *philo)
         while(i < philo->data->nb_philo)
         {
             pthread_mutex_lock(philo->data->mutex1);
-            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die )
+            if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die && philo[i].is_full == 0)
             {
                 printf("\033[0;31m");
                 ft_print(&philo[i], "is dead\n");
@@ -112,6 +116,8 @@ void ft_monitoring(t_philo *philo)
             pthread_mutex_unlock(philo->data->mutex1);
             i++;
         }
+        if (philo->is_full == 1)
+            return ;
         usleep(1000);
     }
 }
