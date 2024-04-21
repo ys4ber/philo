@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 22:17:23 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/21 22:17:24 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/21 23:05:08 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,20 @@ bool	ft_check_validity(int ac, char **av)
 		i++;
 	}
 	return (false);
+}
+
+int	ft_fill_data(t_philo *philo, int ac, char **av)
+{
+	if (ft_check_validity(ac, av) == true)
+		return (1);
+	philo->data->nb_philo = ft_atoi(av[1]);
+	philo->data->time_to_die = ft_atoi(av[2]);
+	philo->data->time_to_eat = ft_atoi(av[3]);
+	philo->data->time_to_sleep = ft_atoi(av[4]);
+	if (ac == 6)
+		philo->data->nb_must_eat = ft_atoi(av[5]);
+	else
+		philo->data->nb_must_eat = -1;
+	philo->data->is_dead = 0;
+	return (0);
 }
