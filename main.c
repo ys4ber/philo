@@ -53,48 +53,6 @@ void *routine(void *p)
     return (NULL);
 }
 
-
-// void *routine(void *p)
-// {
-//     t_philo *philo;
-//     philo = (t_philo *)p;
-
-//     if (philo->id % 2 == 0)
-//         ft_usleep(60);
-//     while (1)
-//     {
-//         pthread_mutex_lock(philo->data->mutex1);
-//         if (philo->data->nb_must_eat != -1 && philo->nb_eat >= philo->data->nb_must_eat)
-//             philo->is_full = 1;
-//         pthread_mutex_unlock(philo->data->mutex1);
-//         pthread_mutex_lock(philo->data->mutex1);
-//         if (philo->is_full)
-//         {
-//             pthread_mutex_unlock(philo->data->mutex1);
-//             break;
-//         }
-//         pthread_mutex_unlock(philo->data->mutex1);
-//         pthread_mutex_lock(philo->left_fork);
-//         ft_print(philo, "has taken a fork");
-//         pthread_mutex_lock(philo->right_fork);
-//         ft_print(philo, "has taken a fork");
-//         pthread_mutex_lock(philo->data->mutex1);
-//         philo->last_eat = ft_get_time();
-//         pthread_mutex_unlock(philo->data->mutex1);
-//         ft_print(philo, "is eating");
-//         ft_usleep(philo->data->time_to_eat);
-//         pthread_mutex_unlock(philo->left_fork);
-//         pthread_mutex_unlock(philo->right_fork);
-//         pthread_mutex_lock(philo->data->mutex1);
-//         philo->nb_eat++;
-//         pthread_mutex_unlock(philo->data->mutex1);
-//         ft_print(philo, "is sleeping");
-//         ft_usleep(philo->data->time_to_sleep);
-//         ft_print(philo, "is thinking");
-//     }
-//     return (NULL);
-// }
-
 void ft_free_all(t_philo *philo)
 {
     for (int i = 0; i < philo->data->nb_philo; i++)
@@ -139,7 +97,6 @@ void ft_monitoring(t_philo *philo)
 
     while (1)
     {
-        // for (int i = 0; i < philo->data->nb_philo; i++)
         i = 0;
         while(i < philo->data->nb_philo)
         {

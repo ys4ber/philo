@@ -5,7 +5,7 @@ CC = cc
 CFLAGS =  -Wall -Wextra -Werror  -g3 -pthread #-fsanitize=thread
 
 
-SRCS = main.c  ft_utils.c #ft_file1.c
+SRCS = main.c  ft_utils.c
 
 OBJS = $(SRCS:.c=.o)
 
