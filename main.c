@@ -32,13 +32,24 @@ void *routine(void *p)
         ft_print(philo, "has taken a fork");
         pthread_mutex_lock(philo->right_fork);
         ft_print(philo, "has taken a fork");
+
+        
+        
+        pthread_mutex_lock(philo->data->mutex1);
+        philo->last_eat = ft_get_time();
+        pthread_mutex_unlock(philo->data->mutex1);
+
+
+
         ft_print(philo, "is eating");
         ft_usleep(philo->data->time_to_eat);
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
-        pthread_mutex_lock(philo->data->mutex1);
-        philo->last_eat = ft_get_time();
-        pthread_mutex_unlock(philo->data->mutex1);
+
+        // pthread_mutex_lock(philo->data->mutex1);
+        // philo->last_eat = ft_get_time();
+        // pthread_mutex_unlock(philo->data->mutex1);
+
         pthread_mutex_lock(philo->data->mutex1);
         philo->nb_eat++;
         pthread_mutex_unlock(philo->data->mutex1);
@@ -103,7 +114,7 @@ void ft_monitoring(t_philo *philo)
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die )
             {
                 printf("\033[0;31m");
-                ft_print(&philo[i], "\n\n\n\ndiedn");
+                ft_print(&philo[i], "is dead\n");
                 printf("\033[0m");
                 pthread_mutex_unlock(philo->data->mutex1);
                 return ;
@@ -113,7 +124,6 @@ void ft_monitoring(t_philo *philo)
         }
         usleep(500);
     }
-
 }
 
 int ft_free(t_philo *philo)
