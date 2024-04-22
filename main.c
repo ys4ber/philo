@@ -82,12 +82,19 @@ void ft_start_simulation(t_philo *philo)
         philo[i].is_over = 0;
         philo[i].is_started = 0;
         philo[i].last_eat = ft_get_time();
-        philo[i].is_dead = 0;
         philo[i].nb_eat = 0;
         philo[i].data = philo->data;
         philo[i].forks = philo->forks;
-        philo[i].left_fork = &philo->forks[i];
+       if(philo[i].id % 2)
+       {
+         philo[i].left_fork = &philo->forks[i];
         philo[i].right_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
+       }
+       else
+       {
+         philo[i].right_fork = &philo->forks[i];
+        philo[i].left_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
+       }
         pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
         i++;
     }
@@ -107,7 +114,8 @@ void ft_monitoring(t_philo *philo)
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die && philo[i].is_full == 0)
             {
                 printf("\033[0;31m");
-                ft_print(&philo[i], "is dead\n");
+                philo->data->is_dead = 1;
+                ft_print(&philo[i], "is dead");
                 printf("\033[0m");
                 pthread_mutex_unlock(philo->data->mutex1);
                 return ;

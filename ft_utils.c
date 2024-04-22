@@ -38,7 +38,7 @@ void	ft_usleep(long time)
 
 	start = ft_get_time();
 	while (ft_get_time() - start < time)
-		usleep(50);
+		usleep(500);
 }
  
 int ft_error(char *str)
