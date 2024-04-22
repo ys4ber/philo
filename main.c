@@ -44,10 +44,6 @@ void *routine(void *p)
             pthread_mutex_unlock(philo->data->mutex1);
             break;
         }
-        // {
-        //     pthread_mutex_unlock(philo->data->mutex1);
-        //     break;
-        // }
         pthread_mutex_unlock(philo->data->mutex1);
         ft_eat(philo);
         ft_print(philo, "is sleeping");
@@ -65,6 +61,8 @@ void ft_free_all(t_philo *philo)
         pthread_mutex_destroy(&philo->forks[i]);
     }
     pthread_mutex_destroy(philo->data->print);
+    pthread_mutex_destroy(philo->data->mutex1);
+    free(philo->data->mutex1);
     free(philo->forks);
     free(philo->data->print);
     free(philo->data);
@@ -84,12 +82,13 @@ void ft_start_simulation(t_philo *philo)
         philo[i].is_over = 0;
         philo[i].is_started = 0;
         philo[i].last_eat = ft_get_time();
+        philo[i].is_dead = 0;
         philo[i].nb_eat = 0;
         philo[i].data = philo->data;
         philo[i].forks = philo->forks;
         philo[i].left_fork = &philo->forks[i];
         philo[i].right_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
-         pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
+        pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
         i++;
     }
 }
