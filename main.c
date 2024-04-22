@@ -2,6 +2,16 @@
 
 void ft_print(t_philo *philo, char *str)
 {
+    for (int i = 0; i < philo->data->nb_philo; i++)
+    {
+        pthread_mutex_lock(philo->data->mutex1);
+        if (philo->data->is_dead == 1)
+        {
+            pthread_mutex_unlock(philo->data->mutex1);
+            return ;
+        }
+        pthread_mutex_unlock(philo->data->mutex1);
+    }
     pthread_mutex_lock(philo->data->print);
     printf("%ld %d %s\n", ft_get_time() - philo->data->start_time, philo->id, str);
     pthread_mutex_unlock(philo->data->print);
@@ -112,10 +122,12 @@ void ft_monitoring(t_philo *philo)
             pthread_mutex_lock(philo->data->mutex1);
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die && philo[i].is_full == 0)
             {
-                pthread_mutex_lock(philo->data->mutex1);
                 philo->data->is_dead = 1;
-                pthread_mutex_unlock(philo->data->mutex1);
-                ft_print(&philo[i], "is dead");
+                // philo[i].is_dead = 1;
+                pthread_mutex_lock(philo->data->print);
+                printf("%ld %d died\n", ft_get_time() - philo->data->start_time, philo[i].id);
+                pthread_mutex_unlock(philo->data->print);
+                
                 pthread_mutex_unlock(philo->data->mutex1);
                 return ;
             }
