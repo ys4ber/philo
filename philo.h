@@ -50,7 +50,7 @@ typedef struct s_philo
     
     pthread_mutex_t *forks;
     pthread_mutex_t *left_fork;
-    pthread_mutex_t *right_fork;
+    pthread_mutex_t *r_fork;
 } t_philo;
 
 
