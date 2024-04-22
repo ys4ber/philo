@@ -41,8 +41,7 @@ void	*routine(void *p)
 	if (philo->id % 2 == 0)
 		ft_usleep(60);
 	while (1)
-	{
-		
+	{	
 		pthread_mutex_lock(philo->data->mutex1);
 		if (philo->data->nb_must_eat != -1
 			&& philo->nb_eat >= philo->data->nb_must_eat)
@@ -65,10 +64,14 @@ void	*routine(void *p)
 
 void	ft_free_all(t_philo *philo)
 {
-	for (int i = 0; i < philo->data->nb_philo; i++)
+	int i;
+
+	i = 0;
+	while (i < philo->data->nb_philo)
 	{
 		pthread_join(philo[i].philo, NULL);
 		pthread_mutex_destroy(&philo->forks[i]);
+		i++;
 	}
 	pthread_mutex_destroy(philo->data->print);
 	pthread_mutex_destroy(philo->data->mutex1);
