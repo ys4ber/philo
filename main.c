@@ -104,7 +104,6 @@ void ft_monitoring(t_philo *philo)
 {
     int i;
 
-
     while (1)
     {
         i = 0;
@@ -113,18 +112,23 @@ void ft_monitoring(t_philo *philo)
             pthread_mutex_lock(philo->data->mutex1);
             if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die && philo[i].is_full == 0)
             {
-                printf("\033[0;31m");
+                pthread_mutex_lock(philo->data->mutex1);
                 philo->data->is_dead = 1;
+                pthread_mutex_unlock(philo->data->mutex1);
                 ft_print(&philo[i], "is dead");
-                printf("\033[0m");
                 pthread_mutex_unlock(philo->data->mutex1);
                 return ;
             }
             pthread_mutex_unlock(philo->data->mutex1);
             i++;
         }
+        pthread_mutex_lock(philo->data->mutex1);
         if (philo->is_full == 1)
+        {
+            pthread_mutex_unlock(philo->data->mutex1);
             return ;
+        }
+        pthread_mutex_unlock(philo->data->mutex1);
         usleep(1000);
     }
 }
