@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 11:42:27 by ysaber            #+#    #+#             */
+/*   Updated: 2024/04/23 11:43:25 by ysaber           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 int	ft_atoi(const char *str)
@@ -24,8 +36,6 @@ int	ft_atoi(const char *str)
 	return (res * sign);
 }
 
-
-
 int	ft_error(char *str)
 {
 	printf("Error: %s\n", str);
@@ -51,4 +61,3 @@ bool	ft_check_validity(int ac, char **av)
 	}
 	return (false);
 }
-

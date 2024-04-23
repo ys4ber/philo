@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_utils1.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 11:42:59 by ysaber            #+#    #+#             */
+/*   Updated: 2024/04/23 11:43:16 by ysaber           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	ft_print(t_philo *philo, char *str)
@@ -55,6 +67,7 @@ void	ft_free_all(t_philo *philo)
 	free(philo->data);
 	free(philo);
 }
+
 void	ft_print_dead(t_philo *philo)
 {
 	pthread_mutex_lock(philo->data->print);
