@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:30 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/23 23:17:17 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/25 21:09:27 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,8 @@ void	ft_start_simulation(t_philo *philo)
 		philo[i].nb_eat = 0;
 		philo[i].data = philo->data;
 		philo[i].forks = philo->forks;
-		if (philo[i].id % 2)
-		{
-			philo[i].left_fork = &philo->forks[i];
-			philo[i].r_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
-		}
-		else
-		{
-			philo[i].r_fork = &philo->forks[i];
-			philo[i].left_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
-		}
+		philo[i].left_fork = &philo->forks[i];
+		philo[i].r_fork = &philo->forks[(i + 1) % philo->data->nb_philo];
 		pthread_create(&philo[i].philo, NULL, routine, &philo[i]);
 		i++;
 	}
@@ -127,8 +119,10 @@ int	main(int ac, char **av)
 {
 	t_philo	*philo;
 
-	if ((ac != 5 && ac != 6) || ft_atoi(av[1]) < 1)
-		return (ft_error("Wrong number of arguments or nb_philo < 1"));
+	if ((ac != 5 && ac != 6))
+		return (ft_error("Wrong number of arguments or invalid arguments"));
+	if (ft_atoi(av[1]) < 1)
+		return (0);
 	philo = malloc(sizeof(t_philo) * ft_atoi(av[1]));
 	if (!philo)
 		return (ft_error("Malloc failed"));
@@ -139,16 +133,13 @@ int	main(int ac, char **av)
 		return (ft_error("Invalid arguments or malloc failed"));
 	if (ft_init_mutexes(philo) == 1)
 		return (ft_error("Mutex init failed"));
-	ft_start_simulation(philo);
-	ft_monitoring(philo);
+	(ft_start_simulation(philo), ft_monitoring(philo));
 	pthread_mutex_lock(philo->data->mutex1);
-	if (philo->data->is_dead == 1 || philo->is_full == 1)
+	if (philo->is_dead == 1 || philo->is_full == 1)
 	{
 		pthread_mutex_unlock(philo->data->mutex1);
 		return (ft_free(philo));
 	}
 	pthread_mutex_unlock(philo->data->mutex1);
-	for (int i = 0; i < philo->data->nb_philo; i++)
-		pthread_join(philo[i].philo, NULL);
 	return (0);
 }
