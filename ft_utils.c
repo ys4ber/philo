@@ -42,6 +42,16 @@ int	ft_error(char *str)
 	return (1);
 }
 
+int ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
 bool	ft_check_validity(int ac, char **av)
 {
 	int	i;
@@ -53,6 +63,8 @@ bool	ft_check_validity(int ac, char **av)
 		j = 0;
 		while (av[i][j])
 		{
+			if (ft_strlen(av[j]) == 0)
+				return (true);
 			if (av[i][j] < '0' || av[i][j] > '9')
 				return (true);
 			j++;

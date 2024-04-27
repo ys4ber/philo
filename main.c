@@ -121,7 +121,7 @@ int	main(int ac, char **av)
 
 	if ((ac != 5 && ac != 6))
 		return (ft_error("Wrong number of arguments or invalid arguments"));
-	if (ft_atoi(av[1]) < 1)
+	if (ft_atoi(av[1]) < 1 || ft_check_validity(ac, av) == true)
 		return (0);
 	philo = malloc(sizeof(t_philo) * ft_atoi(av[1]));
 	if (!philo)
