@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:30 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/28 02:41:18 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/28 18:29:03 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,7 @@ void	ft_monitoring(t_philo *philo)
 		while (i < philo->data->nb_philo)
 		{
 			pthread_mutex_lock(philo->data->mutex1);
-			if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die
-				&& philo[i].is_full == 0)
+			if (ft_get_time() - philo[i].last_eat > philo[i].data->time_to_die)
 			{
 				ft_print_dead(&philo[i]);
 				philo->data->is_dead = 1;
@@ -83,10 +82,20 @@ void	ft_monitoring(t_philo *philo)
 			pthread_mutex_unlock(philo->data->mutex1);
 			i++;
 		}
-		pthread_mutex_lock(philo->data->mutex1);
-		if (philo->is_full == 1)
+		i = 0;
+		int eat_nb = 0;
+		while (i < philo->data->nb_philo)
+		{
+			pthread_mutex_lock(philo->data->mutex1);
+			if (philo[i].is_full == 1)
+				eat_nb++;
+			i++;
+			pthread_mutex_unlock(philo->data->mutex1);
+			
+		}
+		if (eat_nb == philo->data->nb_philo) {
 			return (pthread_mutex_unlock(philo->data->mutex1), (void)0);
-		(pthread_mutex_unlock(philo->data->mutex1), usleep(1000));
+		}
 	}
 }
 
@@ -140,6 +149,6 @@ int	main(int ac, char **av)
 		pthread_mutex_unlock(philo->data->mutex1);
 		return (ft_free(philo));
 	}
-	pthread_mutex_unlock(philo->data->mutex1);
+	// pthread_mutex_unlock(philo->data->mutex1);
 	return (0);
 }

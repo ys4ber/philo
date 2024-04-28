@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:24 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/23 11:43:32 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/28 18:12:58 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ int	ft_fill_data(t_philo *philo, int ac, char **av)
 	else
 		philo->data->nb_must_eat = -1;
 	philo->data->is_dead = 0;
+
 	return (0);
 }
