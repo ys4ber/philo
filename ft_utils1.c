@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:59 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/28 18:08:11 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/28 21:03:52 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ void	ft_free_all(t_philo *philo)
 
 void	ft_print_dead(t_philo *philo)
 {
+	for (int i = 0; i < philo->data->nb_philo; i++)
+	{
+		if (philo[i].is_full == 1)
+			return ;
+	}
+		
 	pthread_mutex_lock(philo->data->print);
 	printf("%ld %d died\n", ft_get_time() - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(philo->data->print);

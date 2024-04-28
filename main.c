@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:30 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/28 18:29:03 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/28 21:01:35 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,10 @@ void	ft_monitoring(t_philo *philo)
 			if (philo[i].is_full == 1)
 				eat_nb++;
 			i++;
-			pthread_mutex_unlock(philo->data->mutex1);
-			
+			pthread_mutex_unlock(philo->data->mutex1);	
 		}
-		if (eat_nb == philo->data->nb_philo) {
+		if (eat_nb == philo->data->nb_philo)
 			return (pthread_mutex_unlock(philo->data->mutex1), (void)0);
-		}
 	}
 }
 
