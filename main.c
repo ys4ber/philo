@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:30 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/25 21:09:27 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/28 02:41:18 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	main(int ac, char **av)
 {
 	t_philo	*philo;
 
-	if ((ac != 5 && ac != 6))
+	if ((ac != 5 && ac != 6) || ft_check_validity(ac, av) == true)
 		return (ft_error("Wrong number of arguments or invalid arguments"));
 	if (ft_atoi(av[1]) < 1 || ft_check_validity(ac, av) == true)
 		return (0);

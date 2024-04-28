@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:18 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/23 11:42:45 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/28 02:51:02 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,9 @@ typedef struct s_data
 	int				nb_must_eat;
 	long			start_time;
 	int				is_dead;
-	pthread_mutex_t	*last_meal;
-	pthread_mutex_t	*last_eat_time;
 	pthread_mutex_t	*print;
 
 	pthread_mutex_t	*mutex1;
-	pthread_mutex_t	*mutex2;
-	pthread_mutex_t	*mutex3;
-	pthread_mutex_t	*mutex4;
-
 }					t_data;
 
 typedef struct s_philo
@@ -65,6 +59,7 @@ typedef struct s_philo
 int					ft_atoi(const char *str);
 int					ft_error(char *str);
 bool				ft_check_validity(int ac, char **av);
+int					ft_strlen(char *str);
 
 // ft_sleep.c
 int					ft_fill_data(t_philo *philo, int ac, char **av);
@@ -72,7 +67,6 @@ long				ft_get_time(void);
 void				ft_usleep(long time);
 
 // ft_utils1.c
-
 void				ft_print(t_philo *philo, char *str);
 void				ft_eat(t_philo *philo);
 void				ft_free_all(t_philo *philo);

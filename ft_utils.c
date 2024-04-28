@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:27 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/23 11:43:25 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/28 02:47:31 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_error(char *str)
 	return (1);
 }
 
-int ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
 	int	i;
 
@@ -60,11 +60,11 @@ bool	ft_check_validity(int ac, char **av)
 	i = 1;
 	while (i < ac)
 	{
+		if (ft_strlen(av[i]) == 0)
+			return (true);
 		j = 0;
 		while (av[i][j])
 		{
-			if (ft_strlen(av[j]) == 0)
-				return (true);
 			if (av[i][j] < '0' || av[i][j] > '9')
 				return (true);
 			j++;
