@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:30 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/28 21:01:35 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/30 18:39:20 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,7 @@ void	ft_monitoring(t_philo *philo)
 			pthread_mutex_unlock(philo->data->mutex1);
 			i++;
 		}
-		i = 0;
-		int eat_nb = 0;
-		while (i < philo->data->nb_philo)
-		{
-			pthread_mutex_lock(philo->data->mutex1);
-			if (philo[i].is_full == 1)
-				eat_nb++;
-			i++;
-			pthread_mutex_unlock(philo->data->mutex1);	
-		}
-		if (eat_nb == philo->data->nb_philo)
+		if (count_full_philosophers(philo) == philo->data->nb_philo)
 			return (pthread_mutex_unlock(philo->data->mutex1), (void)0);
 	}
 }
@@ -147,6 +137,5 @@ int	main(int ac, char **av)
 		pthread_mutex_unlock(philo->data->mutex1);
 		return (ft_free(philo));
 	}
-	// pthread_mutex_unlock(philo->data->mutex1);
 	return (0);
 }

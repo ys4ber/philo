@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:27 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/28 02:47:31 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/30 18:40:11 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,22 @@ bool	ft_check_validity(int ac, char **av)
 		i++;
 	}
 	return (false);
+}
+
+int	count_full_philosophers(t_philo *philo)
+{
+	int	i;
+	int	eat_nb;
+
+	i = 0;
+	eat_nb = 0;
+	while (i < philo->data->nb_philo)
+	{
+		pthread_mutex_lock(philo->data->mutex1);
+		if (philo[i].is_full == 1)
+			eat_nb++;
+		i++;
+		pthread_mutex_unlock(philo->data->mutex1);
+	}
+	return (eat_nb);
 }

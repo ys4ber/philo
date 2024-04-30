@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:18 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/28 02:51:02 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/30 18:39:05 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int					ft_atoi(const char *str);
 int					ft_error(char *str);
 bool				ft_check_validity(int ac, char **av);
 int					ft_strlen(char *str);
+int					count_full_philosophers(t_philo *philo);
 
 // ft_sleep.c
 int					ft_fill_data(t_philo *philo, int ac, char **av);

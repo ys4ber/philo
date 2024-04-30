@@ -6,7 +6,7 @@
 /*   By: ysaber <ysaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:42:59 by ysaber            #+#    #+#             */
-/*   Updated: 2024/04/28 21:03:52 by ysaber           ###   ########.fr       */
+/*   Updated: 2024/04/30 18:41:04 by ysaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,19 @@ void	ft_eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	ft_print(philo, "has taken a fork");
-	
 	pthread_mutex_lock(philo->r_fork);
 	ft_print(philo, "has taken a fork");
-	
 	ft_print(philo, "is eating");
-	
 	pthread_mutex_lock(philo->data->mutex1);
 	philo->last_eat = ft_get_time();
 	pthread_mutex_unlock(philo->data->mutex1);
-
 	ft_usleep(philo->data->time_to_eat);
-	
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->left_fork);
-	
 	pthread_mutex_lock(philo->data->mutex1);
-
 	philo->nb_eat++;
-	
 	pthread_mutex_unlock(philo->data->mutex1);
 }
-
 
 void	ft_free_all(t_philo *philo)
 {
@@ -79,12 +70,15 @@ void	ft_free_all(t_philo *philo)
 
 void	ft_print_dead(t_philo *philo)
 {
-	for (int i = 0; i < philo->data->nb_philo; i++)
+	int	i;
+
+	i = 0;
+	while (i < philo->data->nb_philo)
 	{
 		if (philo[i].is_full == 1)
 			return ;
+		i++;
 	}
-		
 	pthread_mutex_lock(philo->data->print);
 	printf("%ld %d died\n", ft_get_time() - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(philo->data->print);
@@ -95,8 +89,3 @@ int	ft_free(t_philo *philo)
 	ft_free_all(philo);
 	return (1);
 }
-
-
-// [1] 0 - 200    = 0
-// [3] 200 - 100  = 200
-// [2] 400 - 600  = 400
