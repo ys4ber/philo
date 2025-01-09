@@ -33,23 +33,6 @@ To compile and run this project, you will need:
 - Resource sharing
 - Process synchronization
 
-## 🏗️ Project Structure
-
-```
-philosophers/
-├── philo/
-    ├── src/
-    │   ├── main.c
-    │   ├── init.c
-    │   ├── utils.c
-    │   ├── routines.c
-    │   └── monitoring.c
-    ├── includes/
-    │   └── philosophers.h
-    └── Makefile
-
-```
-
 ## 🚀 Getting Started
 
 1. Clone the repository:
@@ -59,7 +42,7 @@ git clone <your-repo-url> philosophers
 
 2. Navigate to the project directory:
 ```bash
-cd philosophers/philo
+cd philosophers
 ```
 
 3. Compile the project:
