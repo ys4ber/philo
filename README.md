@@ -47,12 +47,7 @@ philosophers/
 │   ├── includes/
 │   │   └── philosophers.h
 │   └── Makefile
-└── philo_bonus/
-    ├── src/
-    │   └── [bonus files]
-    ├── includes/
-    │   └── philosophers_bonus.h
-    └── Makefile
+
 ```
 
 ## 🚀 Getting Started
@@ -137,7 +132,7 @@ Test your program with various scenarios:
 
 ## 💡 Tips
 
-- Use `usleep()` with caution - it's not precise for very small values
+- Create a custom timing function instead of using usleep() directly - the system's sleep function isn't precise enough for accurate death detection
 - Remember to protect all shared resources with mutexes
 - Implement a monitoring system to check for deaths
 - Time calculations should be precise
@@ -160,16 +155,6 @@ Key points that will be checked during evaluation:
 - [ ] Resource cleanup on exit
 - [ ] Proper use of mutexes/semaphores
 - [ ] Accurate timing management
-
-## 🎨 Bonus Part
-
-The bonus part involves implementing the same simulation using processes instead of threads and semaphores instead of mutexes.
-
-Key differences:
-- Use of `fork()` instead of threads
-- Semaphores for synchronization
-- Shared memory management
-- Different project structure
 
 ## ⚖️ License
 
