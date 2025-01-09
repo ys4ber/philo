@@ -1,6 +1,6 @@
 # 🍝 Philosophers
 
-<img src="[/api/placeholder/800/300](https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Dining_philosophers_diagram.jpg/220px-Dining_philosophers_diagram.jpg)" alt="Philosophers dining table illustration" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Dining_philosophers_diagram.jpg/220px-Dining_philosophers_diagram.jpg" alt="Philosophers dining table illustration" />
 
 ## 🎯 Project Overview
 
