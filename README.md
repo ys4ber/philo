@@ -38,15 +38,15 @@ To compile and run this project, you will need:
 ```
 philosophers/
 ├── philo/
-│   ├── src/
-│   │   ├── main.c
-│   │   ├── init.c
-│   │   ├── utils.c
-│   │   ├── routines.c
-│   │   └── monitoring.c
-│   ├── includes/
-│   │   └── philosophers.h
-│   └── Makefile
+    ├── src/
+    │   ├── main.c
+    │   ├── init.c
+    │   ├── utils.c
+    │   ├── routines.c
+    │   └── monitoring.c
+    ├── includes/
+    │   └── philosophers.h
+    └── Makefile
 
 ```
 
